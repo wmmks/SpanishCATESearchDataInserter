@@ -55,12 +55,10 @@ public class SplitSentenceAndTagging {
             // flag 用來判斷...之類之符號(主要確認是否有進入判斷式過)
             boolean flag = false;
             for (int i = 0; i < charArray.length; i++) {
-                if (charArray[i] == '¿' || charArray[i] == '¡' || charArray[i] == '“') {
+                if (i == (charArray.length - 1)) {
                     sentence.append(charArray[i]);
-                    sentence.append(' ');
-                } else if (charArray[i] == '”' || charArray[i] == ',' || charArray[i] == ':') {
-                    sentence.append(' ');
-                    sentence.append(charArray[i]);
+                    sentenceList.add(sentence.toString());
+                    sentence = new StringBuilder();
                 } else if (charArray[i] == '.' || charArray[i] == '?' || charArray[i] == '!') {
                     if (i + 1 < charArray.length) {
                         if (charArray[i + 1] == '.' || charArray[i + 1] == '?' || charArray[i + 1] == '!') {
@@ -88,10 +86,17 @@ public class SplitSentenceAndTagging {
                             flag = false;
                         }
                     }
-                } else if (i == (charArray.length - 1)) {
+                } else if (charArray[i] == ';' || charArray[i] == '(' || charArray[i] == ')' ||
+                        charArray[i] == '—' || charArray[i] == '"' || charArray[i] == '；' ||
+                        charArray[i] == '”' || charArray[i] == '¿' || charArray[i] == '¡' ||
+                        charArray[i] == '“' || charArray[i] == ',' || charArray[i] == ':' ||
+                        charArray[i] == '─' || charArray[i] == '「' || charArray[i] == '」' ||
+                        charArray[i] == '）' || charArray[i] == '-' || charArray[i] == '¨' ||
+                        charArray[i] == '=' || charArray[i] == '－' || charArray[i] == '–' ||
+                        charArray[i] == '´') {
+                    sentence.append(' ');
                     sentence.append(charArray[i]);
-                    sentenceList.add(sentence.toString());
-                    sentence = new StringBuilder();
+                    sentence.append(' ');
                 } else {
                     if (!isChinese(String.valueOf(charArray[i]))) {
                         sentence.append(charArray[i]);

@@ -30,12 +30,12 @@ public class InsertDataIntoDB {
         mysqlDatabaseController.execDelete(DatabaseConstants.ORIGINAL_SENTENCES_CONTENT, "1");
         mysqlDatabaseController.execDelete(DatabaseConstants.CORRECTED_WORDS_INDEX_TABLE, "1");
         mysqlDatabaseController.execDelete(DatabaseConstants.CORRECTED_SENTENCES_CONTENT, "1");
+        System.out.println("Clear Finished...");
         try {
-            Thread.sleep(40000);
+            Thread.sleep(4000);
         } catch (InterruptedException e) {
             e.getCause();
         }
-        System.out.println("Clear Finished...");
         // words_table 資訊，進入迴圈後可以不用重新產生
         int wordID = 1; // word_table word id
         Map<String, Integer> wordsTable = new HashMap<String, Integer>();
@@ -92,12 +92,15 @@ public class InsertDataIntoDB {
                         Boolean b = false;
                         if (i != (seg.length - 1)) {
                             String[] nextWord = seg[i + 1].split(FoldName.SPLIT);
-                            String[] mark = new String[]{".","?","¿","!","¡","“","”",",",":"};
+                            // 如果有以下符號就不會有空白
+                            String[] mark = new String[]{";","(",")","—","\"","；","”","¿","¡","“",","
+                                    ,":","─","「","」","）","-","¨","=",".","?","!","－","–","´"};
                             for (String m : mark) {
                                 if (nextWord[0].contains(m) || (word[0].contains(m))) {
                                     b = true;
                                 }
                             }
+                            // 現在如果是 , 或 : 後面還是會加空白!
                             if (!b || (word[0].equals(",")) || (word[0].equals(":"))) {
                                 sentence.append(" ");
                             }

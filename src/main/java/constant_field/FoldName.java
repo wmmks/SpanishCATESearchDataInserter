@@ -18,7 +18,7 @@ public class FoldName {
     // 分割 Mabel#N#Mabel(字串、詞性、字根)
     public static final String SPLIT = "#";
     // Set TreeTagger Path
-    public static final String TREE_TAGGER_PATH = "/Users/alex/Desktop/TreeTagger";
+    public static final String TREE_TAGGER_PATH = "D:/TreeTagger";
     public static final String LANGUAGE_MODEL = "/spanish-utf8.par:iso8859-1";
     // Set Article ID Start and Article ID End
     public static final int ARTICLE_ID_START = 1;//1518

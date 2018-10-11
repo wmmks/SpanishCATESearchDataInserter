@@ -27,12 +27,12 @@ public class ExtractDataBaseData {
                 writeFileController = new WriteFileController();
                 writeFileController.writeDataIntoFile(FoldName.ORIGINAL_AND_CORRECT_DATA + FoldName.ORIGINAL_ARTICLE
                                 + articleIDAndOriginalAndCorrectColumnExtraction.getArticleID().
-                                get(i), articleIDAndOriginalAndCorrectColumnExtraction.
+                                get(i) + "_" + articleIDAndOriginalAndCorrectColumnExtraction.getSystemType().get(i), articleIDAndOriginalAndCorrectColumnExtraction.
                                 getOriginalList().get(i));
                 writeFileController = new WriteFileController();
                 writeFileController.writeDataIntoFile(FoldName.ORIGINAL_AND_CORRECT_DATA + FoldName.CORRECT_ARTICLE
                                 + articleIDAndOriginalAndCorrectColumnExtraction.getArticleID().
-                                get(i), articleIDAndOriginalAndCorrectColumnExtraction.
+                                get(i) + "_" + articleIDAndOriginalAndCorrectColumnExtraction.getSystemType().get(i), articleIDAndOriginalAndCorrectColumnExtraction.
                                 getCorrectList().get(i));
             } catch (Exception e) {
                 e.printStackTrace();

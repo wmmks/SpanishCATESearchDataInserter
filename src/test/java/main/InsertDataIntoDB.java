@@ -73,81 +73,86 @@ public class InsertDataIntoDB {
             postSign = "";
             sentenceContent = new HashMap<Integer, List<String>>();
             for (int articleID = FoldName.ARTICLE_ID_START; articleID <= FoldName.ARTICLE_ID_END ; articleID++) {
-                ReadFileController readFileController;
-                try {
-                    readFileController = new ReadFileController(FoldName.ORIGINAL_AND_CORRECT_DATA + dataInsert + articleID);
-                    //readFileControllerSpace = new ReadFileController(FoldName.ORIGINAL_AND_CORRECT_DATA + dataInsert + articleID + FoldName.SAVE_SPACE);
-                } catch (Exception e) {
-                    System.out.println(articleID + " Error Information: " + e.toString());
-                    continue;
-                }
-                String[] segSentenceList = readFileController.getLine().split("\\$");
-                for (String segSentence : segSentenceList) {
-                    StringBuilder sentence = new StringBuilder();
-                    String[] seg = segSentence.split(" ");
-                    // 存原本句子的內容(顯示在搜尋後的頁面)
-                    for (int i = 0; i < seg.length; i++) {
-                        String[] word = seg[i].split(FoldName.SPLIT);
-                        sentence.append(word[0]);
-                        Boolean b = false;
-                        if (i != (seg.length - 1)) {
-                            String[] nextWord = seg[i + 1].split(FoldName.SPLIT);
-                            // 如果有以下符號就不會有空白
-                            String[] mark = new String[]{";","(",")","—","\"","；","”","¿","¡","“",","
-                                    ,":","─","「","」","）","-","¨","=",".","?","!","－","–","´"};
-                            for (String m : mark) {
-                                if (nextWord[0].contains(m) || (word[0].contains(m))) {
-                                    b = true;
+                for (int systemType = 1; systemType <= 2; systemType++) {
+                    ReadFileController readFileController;
+                    try {
+                        readFileController = new ReadFileController(FoldName.ORIGINAL_AND_CORRECT_DATA + dataInsert + articleID + "_" + systemType);
+                        //readFileControllerSpace = new ReadFileController(FoldName.ORIGINAL_AND_CORRECT_DATA + dataInsert + articleID + FoldName.SAVE_SPACE);
+                    } catch (Exception e) {
+                        System.out.println(articleID + " Error Information: " + e.toString());
+                        continue;
+                    }
+                    String[] segSentenceList = readFileController.getLine().split("\\$");
+                    for (String segSentence : segSentenceList) {
+                        StringBuilder sentence = new StringBuilder();
+                        String[] seg = segSentence.split(" ");
+                        // 存原本句子的內容(顯示在搜尋後的頁面)
+                        for (int i = 0; i < seg.length; i++) {
+                            String[] word = seg[i].split(FoldName.SPLIT);
+                            sentence.append(word[0]);
+                            Boolean b = false;
+                            if (i != (seg.length - 1)) {
+                                String[] nextWord = seg[i + 1].split(FoldName.SPLIT);
+                                // 如果有以下符號就不會有空白
+                                String[] mark = new String[]{";","(",")","—","\"","；","”","¿","¡","“",","
+                                        ,":","─","「","」","）","-","¨","=",".","?","!","－","–","´"};
+                                for (String m : mark) {
+                                    if (nextWord[0].contains(m) || (word[0].contains(m))) {
+                                        b = true;
+                                    }
+                                }
+                                // 現在如果是 , 或 : 後面還是會加空白!
+                                if (!b || (word[0].equals(",")) || (word[0].equals(":"))) {
+                                    sentence.append(" ");
                                 }
                             }
-                            // 現在如果是 , 或 : 後面還是會加空白!
-                            if (!b || (word[0].equals(",")) || (word[0].equals(":"))) {
-                                sentence.append(" ");
-                            }
                         }
+                        list = new ArrayList<String>();
+                        list.add(Integer.toString(articleID));
+                        list.add(Integer.toString(systemType));
+                        list.add(sentence.toString());
+                        sentenceContent.put(sentenceID, list);
+                        for (int i = 0; i < seg.length - 1 ; i++) {
+                            if (i == 0) {
+                                String[] s = seg[i].split(FoldName.SPLIT);
+                                if (s[0].equals("¿") || s[0].equals("¡")) {
+                                    priorSign = s[0];
+                                    continue;
+                                }
+                            } if (i == seg.length - 2) {
+                                String[] s = seg[seg.length - 1].split(FoldName.SPLIT);
+                                if (s[0].equals(".") || s[0].equals("?") || s[0].equals("!")) {
+                                    postSign = s[0];
+                                }
+                            }
+                            if (wordsTable.get(seg[i]) == null) {
+                                wordsTable.put(seg[i], wordID);
+                                wordID ++;
+                            }
+                            wordsIndex.put(DatabaseConstants.ID, Integer.toString(id));
+                            wordsIndex.put(DatabaseConstants.SYSTEM_TYPE, Integer.toString(systemType));
+                            wordsIndex.put(DatabaseConstants.SENTENCE_ID, Integer.toString(sentenceID));
+                            wordsIndex.put(DatabaseConstants.WORD_ID, Integer.toString(wordsTable.get(seg[i])));
+                            wordsIndex.put(DatabaseConstants.POSITION, Integer.toString(position));
+                            wordsIndex.put(DatabaseConstants.PRIOR_SIGN, priorSign);
+                            wordsIndex.put(DatabaseConstants.POST_SIGN, postSign);
+                            wordsIndexTable.add(wordsIndex);
+                            id++;
+                            position++;
+                            priorSign = "";
+                            postSign = "";
+                            wordsIndex = new HashMap<String, String>();
+                        }
+                        position = 0;
+                        sentenceID++;
                     }
-                    list = new ArrayList<String>();
-                    list.add(Integer.toString(articleID));
-                    list.add(sentence.toString());
-                    sentenceContent.put(sentenceID, list);
-                    for (int i = 0; i < seg.length - 1 ; i++) {
-                        if (i == 0) {
-                            String[] s = seg[i].split(FoldName.SPLIT);
-                            if (s[0].equals("¿") || s[0].equals("¡")) {
-                                priorSign = s[0];
-                                continue;
-                            }
-                        } if (i == seg.length - 2) {
-                            String[] s = seg[seg.length - 1].split(FoldName.SPLIT);
-                            if (s[0].equals(".") || s[0].equals("?") || s[0].equals("!")) {
-                                postSign = s[0];
-                            }
-                        }
-                        if (wordsTable.get(seg[i]) == null) {
-                            wordsTable.put(seg[i], wordID);
-                            wordID ++;
-                        }
-                        wordsIndex.put(DatabaseConstants.ID, Integer.toString(id));
-                        wordsIndex.put(DatabaseConstants.SENTENCE_ID, Integer.toString(sentenceID));
-                        wordsIndex.put(DatabaseConstants.WORD_ID, Integer.toString(wordsTable.get(seg[i])));
-                        wordsIndex.put(DatabaseConstants.POSITION, Integer.toString(position));
-                        wordsIndex.put(DatabaseConstants.PRIOR_SIGN, priorSign);
-                        wordsIndex.put(DatabaseConstants.POST_SIGN, postSign);
-                        wordsIndexTable.add(wordsIndex);
-                        id++;
-                        position++;
-                        priorSign = "";
-                        postSign = "";
-                        wordsIndex = new HashMap<String, String>();
-                    }
-                    position = 0;
-                    sentenceID++;
                 }
             }
             // Data Insert To Words Index Table
             for (Map<String, String> wit : wordsIndexTable) {
                 wordsIndexTableSqlObject = new SqlObject();
                 wordsIndexTableSqlObject.addSqlObject(DatabaseConstants.ID, wit.get(DatabaseConstants.ID));
+                wordsIndexTableSqlObject.addSqlObject(DatabaseConstants.SYSTEM_TYPE, wit.get(DatabaseConstants.SYSTEM_TYPE));
                 wordsIndexTableSqlObject.addSqlObject(DatabaseConstants.SENTENCE_ID, wit.get(DatabaseConstants.SENTENCE_ID));
                 wordsIndexTableSqlObject.addSqlObject(DatabaseConstants.WORD_ID, wit.get(DatabaseConstants.WORD_ID));
                 wordsIndexTableSqlObject.addSqlObject(DatabaseConstants.POSITION, wit.get(DatabaseConstants.POSITION));
@@ -163,7 +168,9 @@ public class InsertDataIntoDB {
                 sentenceContentSqlObject.addSqlObject(
                         DatabaseConstants.ARTICLE_ID, sentenceContent.get(sc).get(0));
                 sentenceContentSqlObject.addSqlObject(
-                        DatabaseConstants.TEXT, sentenceContent.get(sc).get(1));
+                        DatabaseConstants.SYSTEM_TYPE, sentenceContent.get(sc).get(1));
+                sentenceContentSqlObject.addSqlObject(
+                        DatabaseConstants.TEXT, sentenceContent.get(sc).get(2));
                 mysqlDatabaseController.execInsert(content, sentenceContentSqlObject);
             }
             System.out.println(content + " is finished");

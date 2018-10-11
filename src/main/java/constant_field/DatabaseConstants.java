@@ -22,6 +22,7 @@ public class DatabaseConstants {
     public static final String POS = "pos";
     public static final String LEMMA = "lemma";
     public static final String ARTICLE_ID = "article_id";
+    public static final String SYSTEM_TYPE = "system_type";
     public static final String ORIGINAL_ARTICLE_TEXT = "original_article_text";
     public static final String CORRECTED_ARTICLE_TEXT = "corrected_article_text";
 }

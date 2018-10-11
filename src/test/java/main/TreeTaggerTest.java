@@ -9,7 +9,7 @@ public class TreeTaggerTest {
     public static void main(final String[] args) throws Exception {
         TreeTagger treeTagger = new TreeTagger();
         // String s = "Javier es un poco nervioso por Estela siente con le .";
-        String s1 = "Caperucita roja fue llamado a atención porlos flores, mariosa maravillosas y los pájaros que cantabanbien.";
+        String s1 = " He estado una vez en Isla Verde con unos compañera de clase en este verano .";
         // System.out.println(treeTagger.getPOSTag(s));
         System.out.println(treeTagger.getPOSTag(s1));
     }

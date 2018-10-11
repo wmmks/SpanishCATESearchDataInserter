@@ -26,6 +26,11 @@ public class ArticleIDAndOriginalAndCorrectColumnExtraction {
     private ArrayList<String> articleID;
 
     /**
+     * systemType List.
+     */
+    private ArrayList<String> systemType;
+
+    /**
      * Original Content List.
      */
     private ArrayList<String> originalList;
@@ -41,6 +46,7 @@ public class ArticleIDAndOriginalAndCorrectColumnExtraction {
     public ArticleIDAndOriginalAndCorrectColumnExtraction() {
         mysqlDatabaseController = new MysqlDatabaseController();
         articleID = new ArrayList<String>();
+        systemType = new ArrayList<String>();
         originalList = new ArrayList<String>();
         correctList = new ArrayList<String>();
     }
@@ -50,15 +56,16 @@ public class ArticleIDAndOriginalAndCorrectColumnExtraction {
      */
     public void setOriginalAndCorrectColumn() {
         ResultSet resultSet = mysqlDatabaseController.execSelect
-                ( DatabaseConstants.ID + "," +
+                ( DatabaseConstants.ID + "," + DatabaseConstants.SYSTEM_TYPE + "," +
                                 DatabaseConstants.ORIGINAL_ARTICLE_TEXT + "," +
                                 DatabaseConstants.CORRECTED_ARTICLE_TEXT,
                         DatabaseConstants.ARTICLE_CONTENT, "1");
         try {
             while (resultSet.next()) {
                 articleID.add(resultSet.getString(1));
-                originalList.add(resultSet.getString(2));
-                correctList.add(resultSet.getString(3));
+                systemType.add(resultSet.getString(2));
+                originalList.add(resultSet.getString(3));
+                correctList.add(resultSet.getString(4));
             }
         } catch (SQLException e) {
             e.getErrorCode();
@@ -71,6 +78,14 @@ public class ArticleIDAndOriginalAndCorrectColumnExtraction {
      */
     public ArrayList<String> getArticleID() {
         return articleID;
+    }
+
+    /**
+     * Get System type List.
+     * @return system type
+     */
+    public ArrayList<String> getSystemType() {
+        return systemType;
     }
 
     /**

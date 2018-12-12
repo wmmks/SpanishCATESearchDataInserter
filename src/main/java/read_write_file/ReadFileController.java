@@ -28,6 +28,7 @@ public class ReadFileController {
      */
     public ReadFileController(final String fileName) throws IOException {
         lineList = new ArrayList<String>();
+        System.out.println(fileName);
         BufferedReader bufferedReader =
                 getBufferedReader(fileName);
         while (bufferedReader.ready()) {

@@ -9,7 +9,11 @@ public class TreeTaggerTest {
     public static void main(final String[] args) throws Exception {
         TreeTagger treeTagger = new TreeTagger();
         // String s = "Javier es un poco nervioso por Estela siente con le .";
-        String s1 = " He estado una vez en Isla Verde con unos compañera de clase en este verano .";
+        if ("pájaros".toLowerCase().equals("pájaros")) {
+            System.out.println("hi");
+        }
+        System.out.println("Pájaros".toLowerCase());
+        String s1 = "Ellas estaban muy contentas, y para darle las gracias al cazador, la abuelita lo invitó a comer pan dulce y beber chocolate caliente.";
         // System.out.println(treeTagger.getPOSTag(s));
         System.out.println(treeTagger.getPOSTag(s1));
     }

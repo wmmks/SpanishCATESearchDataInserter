@@ -66,7 +66,12 @@ public class TreeTagger {
             ttw.setModel(FoldName.LANGUAGE_MODEL);
             ttw.setHandler(new TokenHandler<String>() {
                 public void token(String token, String pos, String lemma) {
-                    tagging += token + FoldName.SPLIT + posConverter.get(pos) + FoldName.SPLIT + lemma + " ";
+                    // Extra Processing
+                    if (token.toLowerCase().equals("pájaros")) {
+                        tagging += token + FoldName.SPLIT + "N=NC" + FoldName.SPLIT + lemma + " ";
+                    } else {
+                        tagging += token + FoldName.SPLIT + posConverter.get(pos) + FoldName.SPLIT + lemma + " ";
+                    }
                 }
             });
             ttw.process(input);

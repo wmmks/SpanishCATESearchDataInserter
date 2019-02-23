@@ -13,7 +13,7 @@ public class TreeTaggerTest {
             System.out.println("hi");
         }
         System.out.println("Pájaros".toLowerCase());
-        String s1 = "Ellas estaban muy contentas, y para darle las gracias al cazador, la abuelita lo invitó a comer pan dulce y beber chocolate caliente.";
+        String s1 = "Ellas allí arlos decirla estaban muy contentas, y para darle las gracias al cazador, la abuelita lo invitó a comer pan dulce y beber chocolate caliente.";
         // System.out.println(treeTagger.getPOSTag(s));
         System.out.println(treeTagger.getPOSTag(s1));
     }

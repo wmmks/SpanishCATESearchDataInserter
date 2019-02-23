@@ -11,6 +11,9 @@ public class FoldName {
     public static final String CORRECT_ARTICLE_TAGGING_SPLIT_SENTENCE = "Correct_Article_Tagging_SplitSentence_";
     public static final String RESOURCE = "src/main/resources/";
     public static final String POS_TAGGING_CONVERTER = "pos_tagging_converter";
+    public static final String N_EXCEPTION = "N_Exception";
+    public static final String ADV_EXCEPTION = "ADV_Exception";
+    public static final String VLINF_EXCEPTION = "VLINF_Exception";
     public static final String DATABASE_CONFIGURATION = "databaseConfiguration.properties";
     public static final String FILE_EXTENSION = ".txt";
     // 分割句子

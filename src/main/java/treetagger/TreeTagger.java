@@ -6,6 +6,7 @@ import org.annolab.tt4j.TreeTaggerWrapper;
 import read_write_file.ReadFileController;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -22,16 +23,27 @@ public class TreeTagger {
      * Tree Tagger.
      */
     private TreeTaggerWrapper<String> ttw;
-
     /**
      * Tag Term.
      */
     private String tagging = "";
-
     /**
      * Save Pos Convert Result.
      */
     private HashMap<String, String> posConverter = new HashMap<String, String>();
+    /**
+     * Save Pos Convert Result.
+     */
+    private ArrayList<String> nException = new ArrayList<String>();
+    /**
+     * Save Pos Convert Result.
+     */
+    private ArrayList<String> advException = new ArrayList<String>();
+    /**
+     * Save Pos Convert Result.
+     */
+    private ArrayList<String> vlinfException = new ArrayList<String>();
+
 
     /**
      * System Configure，Tree Tagger Path(Depending On User).
@@ -48,6 +60,16 @@ public class TreeTagger {
                 posConverter.put(pos.split(":")[0], pos.split(":")[1] +
                         "=" + pos.split(":")[0]);
             }
+            // POS Exception
+            ReadFileController readFileControllerN =
+                    new ReadFileController(FoldName.N_EXCEPTION + FoldName.FILE_EXTENSION);
+            nException.addAll(readFileControllerN.getLineList());
+            ReadFileController readFileControllerADV =
+                    new ReadFileController(FoldName.ADV_EXCEPTION + FoldName.FILE_EXTENSION);
+            advException.addAll(readFileControllerADV.getLineList());
+            ReadFileController readFileControllerVLIF =
+                    new ReadFileController(FoldName.VLINF_EXCEPTION + FoldName.FILE_EXTENSION);
+            vlinfException.addAll(readFileControllerVLIF.getLineList());
         } catch (IOException e) {
             e.getMessage();
         }
@@ -67,9 +89,13 @@ public class TreeTagger {
             ttw.setHandler(new TokenHandler<String>() {
                 public void token(String token, String pos, String lemma) {
                     // Extra Processing
-                    if (token.toLowerCase().equals("pájaros")) {
+                    if (nException.contains(token.toLowerCase())) {
                         tagging += token + FoldName.SPLIT + "N=NC" + FoldName.SPLIT + lemma + " ";
-                    } else {
+                    } else if(advException.contains(token.toLowerCase())) {
+                        tagging += token + FoldName.SPLIT + "Adv=ADV" + FoldName.SPLIT + lemma + " ";
+                    } else if(vlinfException.contains(token.toLowerCase())) {
+                        tagging += token + FoldName.SPLIT + "V=VLinf" + FoldName.SPLIT + lemma + " ";
+                    }  else {
                         tagging += token + FoldName.SPLIT + posConverter.get(pos) + FoldName.SPLIT + lemma + " ";
                     }
                 }

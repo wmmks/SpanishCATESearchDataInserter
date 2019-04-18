@@ -1,5 +1,6 @@
 decirla
 decirles
+decirle
 preguntarle
 preguntarles
 preguntarla
